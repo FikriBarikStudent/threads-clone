@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import React from 'react'
+import { formatDateString } from '@/lib/utils'
 
 interface ThreadCardProps {
     id: string,
@@ -75,11 +76,32 @@ export default function ThreadCard({
                             <Link href={`/threads/${id}`}>
                                 <p className='mt-1 text-subtle-medium text-gray-1'>{comments.length} replies</p>
                             </Link>
-                        )}
+                        )} 
                     </div>
                 </div>
             </div>
+
+            {/* TODO: delete functionality */}
+            {/* TODO: show comment logo */}
+
         </div>
+            {!isComment && community && (
+                <Link href={`/communities/${community.id}`}
+                className='mt-5 flex items-center'>
+                    <p className='text-subtle-mediu, text-gray-1'>
+                        {formatDateString(createdAt)}
+                        {' '}- {community.name} Community
+                    </p>
+
+                    <Image
+                        src={community.image}
+                        alt={community.name}
+                        width={14}
+                        height={14}
+                        className='ml-1 rounded-full object-cover'
+                    />
+                </Link>
+            )}
       </article>
     )
 }

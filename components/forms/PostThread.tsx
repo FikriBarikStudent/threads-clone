@@ -16,10 +16,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Textarea } from '@/components/ui/textarea'
 import { usePathname, useRouter } from 'next/navigation'
-
-import { updateUser } from '@/lib/actions/user.action'
 import { threadValidation } from '@/lib/validations/thread'
 import { createThread } from '@/lib/actions/thread.action'
+import { useOrganization } from '@clerk/nextjs'
 
 interface AccountProfileProps {
   user: {
@@ -37,6 +36,7 @@ export default function PostThread({ userId }: { userId: string }) {
 
     const pathname = usePathname()
     const router = useRouter()
+    const { organization } = useOrganization()
 
     const form = useForm({
         resolver: zodResolver(threadValidation),
@@ -50,7 +50,7 @@ export default function PostThread({ userId }: { userId: string }) {
       await createThread({
         text: values.thread,
         author: userId,
-        communityId: null,
+        communityId: organization ? organization.id :  null,
         path: pathname
       })
 
